@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Delius&display=swap">
+    <title>Mini Portal Usuario </title>
+    <link rel="icon" type="image/jpg"
+        href="https://github.com/Davis26-art/Pagina_web_Ds_Technology/blob/main/IMG/gato.png?raw=true">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Mini Portal de Usuario</h1>
+    </header>
+
+    <main class="container">
+        <h2>Registro Usuario</h2>
+        <form>
+            <label for="inputNombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" required>
+            <p class="error-nombre" id="error-nombre"></p>
+
+            <label for="inputEmail">Email:</label>
+            <input type="email" name="email" id="email" required>
+            <p class="error-email" id="error-email"></p>
+
+            <label for="inputEdad">Edad:</label>
+            <input type="number" name="edad" id="edad" minlength="1" maxlength="120" required>
+            <p class="error-edad" id="error-edad"></p>
+
+            <div class="botones">
+                <button id="btnGuardar">Guardar</button>
+                <button id="btnVer">Ver Datos</button>
+                <button id="btnLimpiar">Limpiar Formulario</button>
+                <button id="btnBorrar">Borrar Datos</button>
+            </div>
+        </form>
+
+        <div class="resultado"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Proyecto de práctica - Eventos JS</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
