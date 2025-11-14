@@ -136,7 +136,7 @@ function mostrarTodosLosUsuarios() {
                 <p><strong>👤 Nombre:</strong> ${u.nombre}</p>
                 <p><strong>📧 Email:</strong> ${u.email}</p>
                 <p><strong>🎂 Edad:</strong> ${u.edad}</p>
-                <button class="btn-eliminar" data-index="${index}" style="display:block; margin:10px auto; padding:5px 10px; background-color:#e74c3c; color:white; border:none; border-radius:6px; cursor:pointer;">❌ Eliminar</button>
+                <button class="btn-eliminar" data-index="${index}" style="display:block; margin:10px auto; padding:5px 10px; background-color:#70484e; color:white; border:none; border-radius:6px; cursor:pointer;">❌ Eliminar</button>
             </div>
         `;
   });
@@ -191,4 +191,3 @@ function limpiarFormulario(mostrarAlert = true) {
     alert("🧹 Formulario limpiado correctamente.");
   }
 }
-
