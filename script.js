@@ -30,18 +30,15 @@ btnGuardar.addEventListener("click", () => {
 // --- Ver datos guardados ---
 btnVer.addEventListener("click", () => {
   if (!datosVisibles) {
-    // Mostrar datos
+    // Solo intenta mostrar, la función decidirá si hay datos o no
     mostrarTodosLosUsuarios();
-    divResultado.style.display = "block";
-    btnVer.textContent = "Ocultar datos";
-    datosVisibles = true;
   } else {
-    // Ocultar datos
     divResultado.style.display = "none";
     btnVer.textContent = "Ver datos";
     datosVisibles = false;
   }
 });
+
 
 // --- Limpiar formulario ---
 btnLimpiar.addEventListener("click", () => {
@@ -58,9 +55,15 @@ btnBorrar.addEventListener("click", () => {
   }
 
   localStorage.removeItem("usuarios");
-  divResultado.innerHTML = `<p style="color:#506879; text-align:center;">🗑️ Todos los datos han sido borrados.</p>`;
   alert("🗑️ Todos los datos han sido borrados.");
+
+  // Limpiar vista y reiniciar estados
+  divResultado.innerHTML = "";
+  divResultado.style.display = "none";
+  btnVer.textContent = "Ver datos";
+  datosVisibles = false;
 });
+
 
 // --- Validar y guardar usuario ---
 function validarYGuardar() {
@@ -104,8 +107,13 @@ function validarYGuardar() {
   alert("✅ Usuario guardado correctamente.");
 
   limpiarFormulario(false);
-  mostrarTodosLosUsuarios();
+
+  // --- REFRESCAR lista automáticamente si ya estaba visible ---
+  if (datosVisibles) {
+    mostrarTodosLosUsuarios();
+  }
 }
+
 
 // --- Función para limpiar errores ---
 function limpiarErrores() {
@@ -120,30 +128,28 @@ function mostrarTodosLosUsuarios() {
   const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
   if (usuarios.length === 0) {
-    divResultado.innerHTML = `<p style="color:red; text-align:center;">⚠️ No hay usuarios guardados.</p>`;
-    return;
+    alert("⚠️ No hay usuarios guardados.");
+    return; // ❗ Detener aquí, sin cambiar nada
   }
 
   let html = `<h3 style="text-align:center;">📋 Lista de Usuarios Registrados</h3>`;
 
   usuarios.forEach((u, index) => {
     html += `
-            <div class="tarjeta-usuario" style="border:1px solid #ccc; padding:10px; margin:10px auto; border-radius:8px; width:90%; max-width:400px; background-color:#f9f9f9;">
-                <p style="text-align: center"><strong>📋 Usuario: #${
-                  index + 1
-                }</strong></p>
-                <hr>
-                <p><strong>👤 Nombre:</strong> ${u.nombre}</p>
-                <p><strong>📧 Email:</strong> ${u.email}</p>
-                <p><strong>🎂 Edad:</strong> ${u.edad}</p>
-                <button class="btn-eliminar" data-index="${index}" style="display:block; margin:10px auto; padding:5px 10px; background-color:#70484e; color:white; border:none; border-radius:6px; cursor:pointer;">❌ Eliminar</button>
-            </div>
-        `;
+      <div class="tarjeta-usuario" style="border:1px solid #ccc; padding:10px; margin:10px auto; border-radius:8px; width:90%; max-width:400px; background-color:#f9f9f9;">
+          <p style="text-align: center"><strong>📋 Usuario: #${index + 1}</strong></p>
+          <hr>
+          <p><strong>👤 Nombre:</strong> ${u.nombre}</p>
+          <p><strong>📧 Email:</strong> ${u.email}</p>
+          <p><strong>🎂 Edad:</strong> ${u.edad}</p>
+          <button class="btn-eliminar" data-index="${index}" style="display:block; margin:10px auto; padding:5px 10px; background-color:#70484e; color:white; border:none; border-radius:6px; cursor:pointer;">❌ Eliminar</button>
+      </div>
+    `;
   });
 
   divResultado.innerHTML = html;
 
-  // --- Activamos los botones de eliminar individuales ---
+  // Activar botones eliminar
   document.querySelectorAll(".btn-eliminar").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const i = e.target.dataset.index;
@@ -151,19 +157,32 @@ function mostrarTodosLosUsuarios() {
     });
   });
 
-  // Asegurar que los datos queden visibles y botón actualizado
+  // Mostrar solo cuando hay datos
   divResultado.style.display = "block";
   btnVer.textContent = "Ocultar datos";
   datosVisibles = true;
 }
+
 
 // --- Eliminar un usuario específico ---
 function eliminarUsuario(index) {
   let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
   usuarios.splice(index, 1);
   localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+  // Si ya no queda nadie, limpiar la vista
+  if (usuarios.length === 0) {
+    divResultado.innerHTML = "";
+    divResultado.style.display = "none";
+    btnVer.textContent = "Ver datos";
+    datosVisibles = false;
+    return;
+  }
+
+  // Si quedan usuarios, actualizar vista
   mostrarTodosLosUsuarios();
 }
+
 
 // --- Limpiar formulario ---
 function limpiarFormulario(mostrarAlert = true) {
