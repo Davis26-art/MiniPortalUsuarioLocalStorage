@@ -12,6 +12,8 @@ const edadInput = document.getElementById("edad");
 // --- Referencia al contenedor de resultados ---
 const divResultado = document.querySelector(".resultado");
 
+let datosVisibles = false;
+
 // --- Limpiar errores en tiempo real ---
 [nombreInput, emailInput, edadInput].forEach((input) => {
   input.addEventListener("input", () => {
@@ -27,7 +29,18 @@ btnGuardar.addEventListener("click", () => {
 
 // --- Ver datos guardados ---
 btnVer.addEventListener("click", () => {
-  mostrarTodosLosUsuarios();
+  if (!datosVisibles) {
+    // Mostrar datos
+    mostrarTodosLosUsuarios();
+    divResultado.style.display = "block";
+    btnVer.textContent = "Ocultar datos";
+    datosVisibles = true;
+  } else {
+    // Ocultar datos
+    divResultado.style.display = "none";
+    btnVer.textContent = "Ver datos";
+    datosVisibles = false;
+  }
 });
 
 // --- Limpiar formulario ---
@@ -90,7 +103,7 @@ function validarYGuardar() {
 
   alert("✅ Usuario guardado correctamente.");
 
-  limpiarFormulario();
+  limpiarFormulario(false);
   mostrarTodosLosUsuarios();
 }
 
@@ -99,7 +112,7 @@ function limpiarErrores() {
   document.getElementById("error-nombre").textContent = "";
   document.getElementById("error-email").textContent = "";
   document.getElementById("error-edad").textContent = "";
-  document.getElementById('error-resultado').textContent = '';
+  //   document.getElementById('error-resultado').textContent = '';
 }
 
 // --- Mostrar todos los usuarios ---
@@ -137,6 +150,11 @@ function mostrarTodosLosUsuarios() {
       eliminarUsuario(i);
     });
   });
+
+  // Asegurar que los datos queden visibles y botón actualizado
+  divResultado.style.display = "block";
+  btnVer.textContent = "Ocultar datos";
+  datosVisibles = true;
 }
 
 // --- Eliminar un usuario específico ---
@@ -148,9 +166,29 @@ function eliminarUsuario(index) {
 }
 
 // --- Limpiar formulario ---
-function limpiarFormulario() {
+function limpiarFormulario(mostrarAlert = true) {
+  const nombre = nombreInput.value.trim();
+  const email = emailInput.value.trim();
+  const edad = edadInput.value.trim();
+
+  // Siempre limpiar errores
+  limpiarErrores();
+
+  // Verificar si ya está vacío
+  if (nombre === "" && email === "" && edad === "") {
+    if (mostrarAlert) {
+      alert("⚠️ El formulario ya está vacío.\nNo hay nada que limpiar.");
+    }
+    return;
+  }
+
+  // Si tiene datos, lo limpiamos
   nombreInput.value = "";
   emailInput.value = "";
   edadInput.value = "";
-  limpiarErrores();
+
+  if (mostrarAlert) {
+    alert("🧹 Formulario limpiado correctamente.");
+  }
 }
+
